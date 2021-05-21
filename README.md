@@ -1,11 +1,12 @@
 Obi Tec - Full Stack Web Developer
 ===================
-O objetivo deste desafio é avaliar as competências técnicas dos candidatos à vaga de desenvolvedor Full Stack Web.
+O objetivo deste desafio é principalmente conhecermos um pouco mais de você que se candidatou para a nossa vaga de desenvolvedor Full Stack Web.
 
-Será solicitado o desenvolvimento de uma aplicação que realize o cadastro de usuários da **Plataforma Obi Tec oAuth**. 
+É importante ressaltar que solução do desafio não tem um gabarito, vamos verificar as técnicas que utilizaram para a criação do serviço, como vocês encaram este desafio e também claro a entrega da solução.   
 
-As regras e os requisitos técnicos estão detalhadas neste documento.
+As regras e os requisitos técnicos estão detalhadas abaixo, boa sorte!
 
+_Time Obi.Tec_
 # Especificações Técnicas
 - **Front End:** [Vue.js](https://vuejs.org)
 - **UI Framework**:  [Vuetifyjs](https://vuetifyjs.com/en)  ou [Bootstrap](https://bootstrap-vue.org)
