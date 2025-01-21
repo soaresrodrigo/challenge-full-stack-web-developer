@@ -1,0 +1,14 @@
+export const Messages = {
+    User: {
+        NOT_FOUND: 'User not found',
+        CREATED: 'User created successfully',
+        UPDATED: 'User updated successfully',
+        DELETED: 'User deleted successfully',
+        EMAIL_ALREADY_EXISTS: 'Email already exists',
+    },
+    Validate: {
+        INVALID_EMAIL: "Invalid email address",
+        LONG_NAME: "Name must be at least 4 characters long",
+        REQUIRED_FIELD_UPDATE: "At least one field is required to update"
+    }
+};

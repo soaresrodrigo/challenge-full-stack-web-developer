@@ -1,11 +1,12 @@
 import express from 'express';
+import routes from './routes/index.routes';
+import { errorHandler } from './middlewares/error.middleware';
 
 const app = express();
 
 app.use(express.json());
+app.use('/api', routes);
 
-app.get('/', (req, res) => {
-  res.status(200).send({ status: 'OK' });
-});
+app.use(errorHandler);
 
-export { app };
+export default app;
