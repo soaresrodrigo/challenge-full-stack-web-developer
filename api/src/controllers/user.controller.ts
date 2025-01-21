@@ -4,6 +4,7 @@ import { validateCreateUser, validateUpdateUser } from '../utils/validate';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { Messages } from '../constants/messages';
+import { User } from '@prisma/client';
 
 const userService = new UserService();
 
@@ -11,6 +12,14 @@ interface HandlerResult<T = unknown> {
     status?: number;
     message?: string;
     data?: T;
+}
+
+interface PaginatedResult<T> {
+    users: T[];
+    total: number;
+    currentPage: number;
+    perPage: number;
+    totalPages: number;
 }
 
 export class UserController {
@@ -38,9 +47,20 @@ export class UserController {
     }
 
     static getUsers(req: Request, res: Response, next: NextFunction): void {
-        UserController.handleRequest(req, res, next, async (): Promise<HandlerResult> => {
-            const users = await userService.getUsers();
-            return { data: users };
+        UserController.handleRequest(req, res, next, async (req): Promise<HandlerResult<PaginatedResult<User>>> => {
+            const currentPage = parseInt(req.query.currentPage as string) || 1;
+            const perPage = parseInt(req.query.perPage as string) || 10;
+            const { users, total, totalPages } = await userService.getUsers(currentPage, perPage);
+
+            const data = {
+                users,
+                total,
+                currentPage,
+                perPage,
+                totalPages
+            };
+
+            return { data };
         });
     }
 
