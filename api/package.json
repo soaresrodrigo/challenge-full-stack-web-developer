@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "tsc && node dist/src/server.js",
     "seed": "ts-node database/seeders/database.seeder.ts",
     "migrate": "npx prisma migrate dev --name init",
     "push": "npx prisma db push",
