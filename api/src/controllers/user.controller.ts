@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from '../services/user.service';
-import { validateCreateUser, validateUpdateUser } from '../utils/validate';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { Messages } from '../constants/messages';
@@ -40,7 +39,6 @@ export class UserController {
     static createUser(req: Request, res: Response, next: NextFunction): void {
         UserController.handleRequest(req, res, next, async (req): Promise<HandlerResult> => {
             const data: CreateUserDTO = req.body;
-            validateCreateUser(data);
             const user = await userService.createUser(data);
             return { status: 201, data: user };
         });
@@ -74,7 +72,6 @@ export class UserController {
     static updateUser(req: Request, res: Response, next: NextFunction): void {
         UserController.handleRequest(req, res, next, async (req): Promise<HandlerResult> => {
             const data: UpdateUserDTO = req.body;
-            validateUpdateUser(data);
             const user = await userService.updateUser(req.params.uuid, data);
             return { data: user };
         });

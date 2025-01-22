@@ -2,11 +2,13 @@ import { PrismaClient, User } from '@prisma/client';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { Messages } from '../constants/messages';
+import { validateCreateUser, validateUpdateUser } from '../utils/validate';
 
 const prisma = new PrismaClient();
 
 export class UserService {
   async createUser(data: CreateUserDTO): Promise<User> {
+    validateCreateUser(data);
     const userRegistered = await this.isEmailAlreadyRegistered(data.email);
 
     if (data.email && userRegistered) {
@@ -44,6 +46,7 @@ export class UserService {
   }
 
   async updateUser(uuid: string, data: UpdateUserDTO): Promise<User> {
+    validateUpdateUser(data);
     const user = await this.getUser(uuid);
 
     if (!user) {
