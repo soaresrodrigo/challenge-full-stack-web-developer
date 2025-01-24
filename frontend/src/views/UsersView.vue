@@ -2,9 +2,9 @@
   <v-row>
     <v-col>
       <v-card>
-        <v-card-title>Bem-vindo ao painel administrativo!</v-card-title>
+        <v-card-title>Usuários</v-card-title>
         <v-card-text>
-          Aqui você pode gerenciar informações.
+          Controle de usuários.
         </v-card-text>
       </v-card>
     </v-col>
