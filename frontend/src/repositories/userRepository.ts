@@ -6,6 +6,11 @@ export interface User {
   name: string
 }
 
+export interface CreateUserDTO {
+  email: string
+  name: string
+}
+
 export interface PaginatedResponse<T> {
   data: T[]
   total: number
@@ -26,5 +31,14 @@ export const userRepository = {
       perPage: response.data.perPage,
       totalPages: response.data.totalPages,
     }
+  },
+
+  async createUser(user: CreateUserDTO): Promise<User> {
+    const response = await apiClient.post('/users', {
+      email: user.email,
+      name: user.name
+    })
+
+    return response.data
   },
 }

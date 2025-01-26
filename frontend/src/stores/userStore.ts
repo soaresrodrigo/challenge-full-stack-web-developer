@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import type { User, PaginatedResponse } from '../repositories/userRepository'
-import { userRepository } from '../repositories/userRepository'
+import type { User, PaginatedResponse } from '@/repositories/userRepository'
+import { userRepository } from '@/repositories/userRepository'
 
 interface UserStoreState {
   users: User[]
@@ -35,6 +35,19 @@ export const useUserStore = defineStore('userStore', {
         this.totalPages = data.totalPages
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao buscar os usuários.'
+      } finally {
+        this.isLoading = false
+      }
+    },
+    async createUser(user: User) {
+      this.isLoading = true
+      this.error = null
+
+      try {
+        await userRepository.createUser(user)
+        await this.fetchUsers(this.currentPage, this.perPage)
+      } catch (error: any) {
+        this.error = error.message || 'Ocorreu um erro ao criar o usuário.'
       } finally {
         this.isLoading = false
       }
