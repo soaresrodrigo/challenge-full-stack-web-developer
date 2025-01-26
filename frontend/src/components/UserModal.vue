@@ -8,6 +8,14 @@
         <v-form>
           <v-text-field label="Nome" v-model="user.name" required></v-text-field>
           <v-text-field label="E-mail" v-model="user.email" required></v-text-field>
+          <v-text-field
+            label="UUID"
+            v-model="user.uuid"
+            :readonly="isEditMode"
+            required
+            append-outer-icon="mdi-refresh"
+            @click:append-outer="generateUuid"
+          ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -26,7 +34,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
-import type { User, CreateUserDTO } from '@/repositories/userRepository';
+import { v4 as uuidv4 } from 'uuid';
+import type { User } from '@/repositories/userRepository';
 
 export default defineComponent({
   name: 'UserModal',
@@ -46,9 +55,9 @@ export default defineComponent({
   },
   emits: ['close', 'save'],
   setup(props, { emit }) {
-    const emptyUser = { name: '', email: '' };
+    const emptyUser = { uuid: uuidv4(), name: '', email: '' };
     const userStore = useUserStore();
-    const user = ref<User | CreateUserDTO>(emptyUser);
+    const user = ref<User>(emptyUser);
     const snackbar = ref({
       show: false,
       message: '',
@@ -62,7 +71,7 @@ export default defineComponent({
         if (props.isEditMode && newUserData) {
           user.value = { ...(newUserData || emptyUser) };
         } else {
-          user.value = emptyUser;
+          user.value = { ...emptyUser, uuid: uuidv4() };
         }
       },
       { immediate: true }
@@ -76,10 +85,10 @@ export default defineComponent({
     const save = async () => {
       try {
         if (props.isEditMode) {
-          await userStore.updateUser(user.value as User);
+          await userStore.updateUser(user.value.uuid, user.value as User);
           showSnackbar('Usuário atualizado com sucesso!', 'success');
         } else {
-          await userStore.createUser(user.value as CreateUserDTO);
+          await userStore.createUser(user.value as User);
           showSnackbar('Usuário criado com sucesso!', 'success');
         }
         emit('save', user.value);
@@ -91,7 +100,7 @@ export default defineComponent({
     };
 
     const clearFields = () => {
-      user.value = emptyUser;
+      user.value = { uuid: uuidv4(), name: '', email: '' };
     };
 
     const onClose = () => {
@@ -105,6 +114,12 @@ export default defineComponent({
       snackbar.value.show = true;
     };
 
+    const generateUuid = () => {
+      if (!props.isEditMode) {
+        user.value.uuid = uuidv4();
+      }
+    };
+
     return {
       user,
       close,
@@ -113,6 +128,7 @@ export default defineComponent({
       onClose,
       snackbar,
       showSnackbar,
+      generateUuid,
     };
   },
 });

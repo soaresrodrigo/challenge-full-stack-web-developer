@@ -12,8 +12,8 @@
     </v-col>
     <UserModal :isOpen="isModalOpen" :isEditMode="isEditMode" :userData="selectedUser" @close="closeModal"
       @save="fetchUsers" />
-    <DeleteUserModal :isOpen="isDeleteModalOpen" :user="selectedUser" @close="closeDeleteModal"
-      @confirmDelete="confirmDeleteUser" />
+    <DeleteUserModal :isOpen="isDeleteModalOpen" :user="selectedUser || { uuid: '', name: '', email: '' }"
+      @close="closeDeleteModal" @confirmDelete="confirmDeleteUser" />
     <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
       {{ snackbar.message }}
       <v-btn color="white" @click="snackbar.show = false">Close</v-btn>

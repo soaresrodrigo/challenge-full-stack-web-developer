@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { User, PaginatedResponse, CreateUserDTO } from '@/repositories/userRepository'
+import type { User, PaginatedResponse, UpdateUserDTO } from '@/repositories/userRepository'
 import { userRepository } from '@/repositories/userRepository'
 
 interface UserStoreState {
@@ -40,7 +40,7 @@ export const useUserStore = defineStore('userStore', {
         this.isLoading = false
       }
     },
-    async createUser(user: CreateUserDTO) {
+    async createUser(user: User) {
       this.isLoading = true
       this.error = null
       try {
@@ -53,11 +53,11 @@ export const useUserStore = defineStore('userStore', {
         this.isLoading = false
       }
     },
-    async updateUser(user: User) {
+    async updateUser(uuid: string, user: UpdateUserDTO) {
       this.isLoading = true
       this.error = null
       try {
-        await userRepository.updateUser(user)
+        await userRepository.updateUser(uuid, user)
         await this.fetchUsers(this.currentPage, this.perPage)
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao atualizar o usuário.'

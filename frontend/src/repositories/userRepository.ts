@@ -6,7 +6,7 @@ export interface User {
   name: string
 }
 
-export interface CreateUserDTO {
+export interface UpdateUserDTO {
   email: string
   name: string
 }
@@ -33,13 +33,13 @@ export const userRepository = {
     }
   },
 
-  async createUser(user: CreateUserDTO): Promise<User> {
+  async createUser(user: User): Promise<User> {
     const response = await apiClient.post('/users', user)
     return response.data
   },
 
-  async updateUser(user: User): Promise<User> {
-    const response = await apiClient.put(`/users/${user.uuid}`, user)
+  async updateUser(uuid: string, user: UpdateUserDTO): Promise<User> {
+    const response = await apiClient.put(`/users/${uuid}`, user)
     return response.data
   },
 
