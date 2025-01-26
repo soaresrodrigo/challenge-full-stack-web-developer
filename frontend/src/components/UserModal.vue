@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="isOpen" max-width="500px">
+  <v-dialog v-model="isOpen" @update:model-value="onClose" max-width="500px">
     <v-card>
       <v-card-title>
-        <span class="headline">{{ title }}</span>
+        <span class="headline">{{ isEditMode ? 'Editar Usuário' : 'Cadastrar Usuário' }}</span>
       </v-card-title>
       <v-card-text>
         <v-form>
@@ -20,9 +20,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
-import type { User } from '@/repositories/userRepository';
+import type { User, CreateUserDTO } from '@/repositories/userRepository';
 
 export default defineComponent({
   name: 'UserModal',
@@ -31,24 +31,44 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    title: {
-      type: String,
-      default: 'Cadastrar Usuário',
+    isEditMode: {
+      type: Boolean,
+      default: false,
+    },
+    userData: {
+      type: Object as () => User | null,
+      default: null,
     },
   },
   emits: ['close', 'save'],
   setup(props, { emit }) {
     const userStore = useUserStore();
-    const user = ref<User>({ uuid: '', name: '', email: '' });
+    const user = ref<User | CreateUserDTO>({ name: '', email: '' });
+
+    watch(
+      () => props.userData,
+      (newUserData) => {
+        if (props.isEditMode && newUserData) {
+          user.value = { ...(newUserData || { name: '', email: '' }) };
+        } else {
+          user.value = { name: '', email: '' };
+        }
+      },
+      { immediate: true }
+    );
 
     const close = () => {
       emit('close');
+      clearFields();
     };
 
     const save = async () => {
       try {
-
-        await userStore.createUser(user.value);
+        if (props.isEditMode) {
+          await userStore.updateUser(user.value as User);
+        } else {
+          await userStore.createUser(user.value as CreateUserDTO);
+        }
         emit('save', user.value);
         close();
       } catch (error) {
@@ -56,10 +76,21 @@ export default defineComponent({
       }
     };
 
+    const clearFields = () => {
+      user.value = { name: '', email: '' };
+    };
+
+    const onClose = () => {
+      clearFields();
+      emit('close');
+    };
+
     return {
       user,
       close,
       save,
+      clearFields,
+      onClose,
     };
   },
 });

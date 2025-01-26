@@ -34,11 +34,16 @@ export const userRepository = {
   },
 
   async createUser(user: CreateUserDTO): Promise<User> {
-    const response = await apiClient.post('/users', {
-      email: user.email,
-      name: user.name
-    })
-
+    const response = await apiClient.post('/users', user)
     return response.data
+  },
+
+  async updateUser(user: User): Promise<User> {
+    const response = await apiClient.put(`/users/${user.uuid}`, user)
+    return response.data
+  },
+
+  async deleteUser(uuid: string): Promise<void> {
+    await apiClient.delete(`/users/${uuid}`)
   },
 }

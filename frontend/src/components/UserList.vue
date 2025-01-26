@@ -20,10 +20,10 @@
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn small color="primary" class="mr-2" @click="editUser(item)">
+          <v-btn small color="primary" class="mr-2" @click="$emit('openEditModal', item)">
             Editar
           </v-btn>
-          <v-btn small color="error" @click="deleteUser(item)">
+          <v-btn small color="error" @click="$emit('openDeleteModal', item)">
             Excluir
           </v-btn>
         </template>
@@ -63,14 +63,6 @@ export default defineComponent({
       userStore.fetchUsers(page);
     };
 
-    const editUser = (item: any) => {
-      console.log('Edit user', item);
-    };
-
-    const deleteUser = (item: any) => {
-      console.log('Delete user with UUID:', item.uuid);
-    };
-
     onMounted(() => {
       fetchUsers(currentPage.value);
     });
@@ -81,8 +73,6 @@ export default defineComponent({
       perPage,
       totalPages,
       fetchUsers,
-      editUser,
-      deleteUser,
       headers: [
         { title: 'UUID', key: 'uuid' },
         { title: 'Nome', key: 'name' },
@@ -93,14 +83,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.v-container {
-  max-width: 80%;
-  margin: auto;
-}
-
-.v-card {
-  margin-top: 20px;
-}
-</style>
