@@ -14,6 +14,10 @@
       @save="fetchUsers" />
     <DeleteUserModal :isOpen="isDeleteModalOpen" :user="selectedUser" @close="closeDeleteModal"
       @confirmDelete="confirmDeleteUser" />
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+      {{ snackbar.message }}
+      <v-btn color="white" @click="snackbar.show = false">Close</v-btn>
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -37,6 +41,18 @@ export default defineComponent({
     const isEditMode = ref(false);
     const isDeleteModalOpen = ref(false);
     const selectedUser = ref<User | null>(null);
+    const snackbar = ref({
+      show: false,
+      message: '',
+      color: '',
+      timeout: 3000,
+    });
+
+    const showSnackbar = (message: string, color: string) => {
+      snackbar.value.message = message;
+      snackbar.value.color = color;
+      snackbar.value.show = true;
+    };
 
     const openModal = () => {
       isEditMode.value = false;
@@ -66,12 +82,21 @@ export default defineComponent({
     };
 
     const confirmDeleteUser = async (uuid: string) => {
-      await userStore.deleteUser(uuid);
+      try {
+        await userStore.deleteUser(uuid);
+        showSnackbar('Usuário excluído com sucesso!', 'success');
+      } catch (error: any) {
+        showSnackbar(error.message || 'Erro ao excluir usuário.', 'error');
+      }
       closeDeleteModal();
     };
 
-    const fetchUsers = () => {
-      userStore.fetchUsers();
+    const fetchUsers = async () => {
+      try {
+        await userStore.fetchUsers();
+      } catch (error: any) {
+        showSnackbar(error.message || 'Erro ao carregar usuários.', 'error');
+      }
     };
 
     return {
@@ -79,6 +104,7 @@ export default defineComponent({
       isEditMode,
       isDeleteModalOpen,
       selectedUser,
+      snackbar,
       openModal,
       closeModal,
       openEditModal,
@@ -86,6 +112,7 @@ export default defineComponent({
       closeDeleteModal,
       confirmDeleteUser,
       fetchUsers,
+      showSnackbar,
     };
   },
 });

@@ -20,18 +20,25 @@ export class UserService {
     });
   }
 
-  async getUsers(currentPage: number, perPage: number): Promise<{ users: User[], total: number, currentPage: number, perPage: number, totalPages: number }> {
-    const skip = (currentPage - 1) * perPage;
-    const [users, total] = await Promise.all([
-      prisma.user.findMany({
-        skip,
-        take: perPage,
-      }),
-      prisma.user.count(),
-    ]);
-    const totalPages = Math.ceil(total / perPage);
-    return { users, total, currentPage, perPage, totalPages };
-  }
+  async getUsers(
+		currentPage: number,
+		perPage: number
+	): Promise<{ users: User[], total: number, currentPage: number, perPage: number, totalPages: number }> {
+		const skip = (currentPage - 1) * perPage;
+		const [users, total] = await Promise.all([
+			prisma.user.findMany({
+				skip,
+				take: perPage,
+				orderBy: [
+					{ updatedAt: 'desc' },
+					{ createdAt: 'desc' },
+				],
+			}),
+			prisma.user.count(),
+		]);
+		const totalPages = Math.ceil(total / perPage);
+		return { users, total, currentPage, perPage, totalPages };
+	}
 
   async getUser(uuid: string): Promise<User> {
     const user = await prisma.user.findUnique({

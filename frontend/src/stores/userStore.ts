@@ -35,6 +35,7 @@ export const useUserStore = defineStore('userStore', {
         this.totalPages = data.totalPages
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao buscar os usuários.'
+        throw error
       } finally {
         this.isLoading = false
       }
@@ -47,6 +48,7 @@ export const useUserStore = defineStore('userStore', {
         await this.fetchUsers(this.currentPage, this.perPage)
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao criar o usuário.'
+        throw error
       } finally {
         this.isLoading = false
       }
@@ -59,6 +61,7 @@ export const useUserStore = defineStore('userStore', {
         await this.fetchUsers(this.currentPage, this.perPage)
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao atualizar o usuário.'
+        throw error
       } finally {
         this.isLoading = false
       }
@@ -71,6 +74,7 @@ export const useUserStore = defineStore('userStore', {
         await this.fetchUsers(this.currentPage, this.perPage)
       } catch (error: any) {
         this.error = error.message || 'Ocorreu um erro ao excluir o usuário.'
+        throw error
       } finally {
         this.isLoading = false
       }

@@ -16,6 +16,10 @@
         <v-btn color="blue darken-1" @click="save">Salvar</v-btn>
       </v-card-actions>
     </v-card>
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
+      {{ snackbar.message }}
+      <v-btn color="white" @click="snackbar.show = false">Close</v-btn>
+    </v-snackbar>
   </v-dialog>
 </template>
 
@@ -44,6 +48,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const userStore = useUserStore();
     const user = ref<User | CreateUserDTO>({ name: '', email: '' });
+    const snackbar = ref({
+      show: false,
+      message: '',
+      color: '',
+      timeout: 3000,
+    });
 
     watch(
       () => props.userData,
@@ -66,13 +76,16 @@ export default defineComponent({
       try {
         if (props.isEditMode) {
           await userStore.updateUser(user.value as User);
+          showSnackbar('Usuário atualizado com sucesso!', 'success');
         } else {
           await userStore.createUser(user.value as CreateUserDTO);
+          showSnackbar('Usuário criado com sucesso!', 'success');
         }
         emit('save', user.value);
         close();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Erro ao salvar usuário:', error);
+        showSnackbar(error.response?.data?.message || 'Erro ao salvar usuário.', 'error');
       }
     };
 
@@ -85,12 +98,20 @@ export default defineComponent({
       emit('close');
     };
 
+    const showSnackbar = (message: string, color: string) => {
+      snackbar.value.message = message;
+      snackbar.value.color = color;
+      snackbar.value.show = true;
+    };
+
     return {
       user,
       close,
       save,
       clearFields,
       onClose,
+      snackbar,
+      showSnackbar,
     };
   },
 });
