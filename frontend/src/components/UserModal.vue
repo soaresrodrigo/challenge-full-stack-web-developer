@@ -18,7 +18,7 @@
     </v-card>
     <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
       {{ snackbar.message }}
-      <v-btn color="white" @click="snackbar.show = false">Close</v-btn>
+      <v-btn color="white" @click="snackbar.show = false">Fechar</v-btn>
     </v-snackbar>
   </v-dialog>
 </template>
@@ -46,8 +46,9 @@ export default defineComponent({
   },
   emits: ['close', 'save'],
   setup(props, { emit }) {
+    const emptyUser = { name: '', email: '' };
     const userStore = useUserStore();
-    const user = ref<User | CreateUserDTO>({ name: '', email: '' });
+    const user = ref<User | CreateUserDTO>(emptyUser);
     const snackbar = ref({
       show: false,
       message: '',
@@ -59,9 +60,9 @@ export default defineComponent({
       () => props.userData,
       (newUserData) => {
         if (props.isEditMode && newUserData) {
-          user.value = { ...(newUserData || { name: '', email: '' }) };
+          user.value = { ...(newUserData || emptyUser) };
         } else {
-          user.value = { name: '', email: '' };
+          user.value = emptyUser;
         }
       },
       { immediate: true }
@@ -90,7 +91,7 @@ export default defineComponent({
     };
 
     const clearFields = () => {
-      user.value = { name: '', email: '' };
+      user.value = emptyUser;
     };
 
     const onClose = () => {

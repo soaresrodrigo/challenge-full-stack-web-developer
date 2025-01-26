@@ -77,7 +77,7 @@ export default defineComponent({
         { title: 'UUID', key: 'uuid' },
         { title: 'Nome', key: 'name' },
         { title: 'E-mail', key: 'email' },
-        { title: 'Ações', key: 'actions', sortable: false },
+        { title: 'Ações', key: 'actions' },
       ],
     };
   },
