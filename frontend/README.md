@@ -36,7 +36,7 @@ cp .env.example .env
 ```
 Edite o arquivo `.env` para incluir as URLs da sua **API** e outras configurações necessárias:
 ```
-VITE_API_BASE_URL=http://localhost:3000/api
+VITE_API_BASE_URL=http://localhost:3000/
 VITE_APP_URL=http://localhost:5173
 ```
 

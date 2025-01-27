@@ -14,18 +14,28 @@
         <router-view />
       </v-container>
     </v-main>
+
+    <v-snackbar v-model="notification.show" :color="notification.color" :timeout="notification.timeout">
+      {{ notification.message }}
+      <v-btn color="white" @click="notification.close">
+        <v-icon icon="fas fa-close" />
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useMenuStore } from '@/stores/menuStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 export default defineComponent({
   setup() {
     const menuStore = useMenuStore();
+    const notificationStore = useNotificationStore();
     return {
       menus: menuStore.menus,
+      notification: notificationStore,
     };
   },
 });

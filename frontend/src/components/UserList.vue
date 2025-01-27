@@ -6,7 +6,7 @@
       </v-card-title>
 
       <v-data-table data-cy="user-list" :headers="headers" :items="users" :items-per-page="perPage" dense
-        class="elevation-1" show-select :hide-default-footer="true">
+        class="elevation-1" :hide-default-footer="true">
 
         <template #item.uuid="{ item }">
           <span data-cy="user-item-uuid">{{ item.uuid }}</span>
@@ -22,10 +22,10 @@
 
         <template #item.actions="{ item }">
           <v-btn small color="primary" class="mr-2" data-cy="edit-button" @click="$emit('openEditModal', item)">
-            Editar
+            <v-icon icon="fas fa-edit" />
           </v-btn>
           <v-btn small color="error" data-cy="delete-button" @click="$emit('openDeleteModal', item)">
-            Excluir
+            <v-icon icon="fas fa-trash" />
           </v-btn>
         </template>
 

@@ -20,16 +20,13 @@
         <v-btn data-cy="user-modal-btn-salvar" color="blue darken-1" :disabled="!valid" @click="save">Salvar</v-btn>
       </v-card-actions>
     </v-card>
-    <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
-      {{ snackbar.message }}
-      <v-btn color="white" @click="snackbar.show = false">Fechar</v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 import { v4 as uuidv4 } from 'uuid';
 import type { User } from '@/repositories/userRepository';
 
@@ -53,14 +50,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const emptyUser = { uuid: uuidv4(), name: '', email: '' };
     const userStore = useUserStore();
+    const notificationStore = useNotificationStore();
     const user = ref<User>(emptyUser);
     const valid = ref(false);
-    const snackbar = ref({
-      show: false,
-      message: '',
-      color: '',
-      timeout: 3000,
-    });
 
     const rules = {
       required: (value: string) => !!value || 'Campo obrigatório',
@@ -84,16 +76,16 @@ export default defineComponent({
       try {
         if (props.isEditMode) {
           await userStore.updateUser(user.value.uuid, user.value as User);
-          showSnackbar('Usuário atualizado com sucesso!', 'success');
+          notificationStore.notify('Usuário atualizado com sucesso!', 'success');
         } else {
           await userStore.createUser(user.value as User);
-          showSnackbar('Usuário criado com sucesso!', 'success');
+          notificationStore.notify('Usuário criado com sucesso!', 'success');
         }
         emit('save', user.value);
         close();
       } catch (error: any) {
         console.error('Erro ao salvar usuário:', error);
-        showSnackbar(error.response?.data?.message || 'Erro ao salvar usuário.', 'error');
+        notificationStore.notify(error.response?.data?.message || 'Erro ao salvar usuário.', 'error');
       }
     };
 
@@ -104,12 +96,6 @@ export default defineComponent({
     const onClose = () => {
       clearFields();
       emit('close');
-    };
-
-    const showSnackbar = (message: string, color: string) => {
-      snackbar.value.message = message;
-      snackbar.value.color = color;
-      snackbar.value.show = true;
     };
 
     const generateUuid = () => {
@@ -123,8 +109,6 @@ export default defineComponent({
       save,
       clearFields,
       onClose,
-      snackbar,
-      showSnackbar,
       generateUuid,
       rules,
     };
