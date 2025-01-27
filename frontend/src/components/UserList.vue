@@ -5,25 +5,26 @@
         <span>Listagem de usuários</span>
       </v-card-title>
 
-      <v-data-table :headers="headers" :items="users" :items-per-page="perPage" dense class="elevation-1" show-select
-        :hide-default-footer="true">
+      <v-data-table data-cy="user-list" :headers="headers" :items="users" :items-per-page="perPage" dense
+        class="elevation-1" show-select :hide-default-footer="true">
+
+        <template #item.uuid="{ item }">
+          <span data-cy="user-item-uuid">{{ item.uuid }}</span>
+        </template>
+
         <template #item.name="{ item }">
-          <strong>{{ item.name }}</strong>
+          <strong data-cy="user-item-name">{{ item.name }}</strong>
         </template>
 
         <template #item.email="{ item }">
-          <em>{{ item.email }}</em>
-        </template>
-
-        <template #item.uuid="{ item }">
-          <span>{{ item.uuid }}</span>
+          <em data-cy="user-item-email">{{ item.email }}</em>
         </template>
 
         <template #item.actions="{ item }">
-          <v-btn small color="primary" class="mr-2" @click="$emit('openEditModal', item)">
+          <v-btn small color="primary" class="mr-2" data-cy="edit-button" @click="$emit('openEditModal', item)">
             Editar
           </v-btn>
-          <v-btn small color="error" @click="$emit('openDeleteModal', item)">
+          <v-btn small color="error" data-cy="delete-button" @click="$emit('openDeleteModal', item)">
             Excluir
           </v-btn>
         </template>

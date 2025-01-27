@@ -1,27 +1,23 @@
 <template>
-  <v-dialog v-model="isOpen" @update:model-value="onClose" max-width="500px">
+  <v-dialog data-cy="user-modal" v-model="isOpen" @update:model-value="onClose" max-width="500px">
     <v-card>
       <v-card-title>
         <span class="headline">{{ isEditMode ? 'Editar Usuário' : 'Cadastrar Usuário' }}</span>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field label="Nome" v-model="user.name" required></v-text-field>
-          <v-text-field label="E-mail" v-model="user.email" required></v-text-field>
-          <v-text-field
-            label="UUID"
-            v-model="user.uuid"
-            :readonly="isEditMode"
-            required
-            append-outer-icon="mdi-refresh"
-            @click:append-outer="generateUuid"
-          ></v-text-field>
+        <v-form ref="userForm" v-model="valid">
+          <v-text-field label="Nome" v-model="user.name" :rules="[rules.required]" required
+            data-cy="user-input-name"></v-text-field>
+          <v-text-field label="E-mail" v-model="user.email" :rules="[rules.required, rules.email]" required
+            data-cy="user-input-email"></v-text-field>
+          <v-text-field label="UUID" v-model="user.uuid" :readonly="isEditMode" required append-outer-icon="mdi-refresh"
+            @click:append-outer="generateUuid" data-cy="user-input-uuid"></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" @click="close">Cancelar</v-btn>
-        <v-btn color="blue darken-1" @click="save">Salvar</v-btn>
+        <v-btn data-cy="user-modal-btn-cancel" color="blue darken-1" @click="close">Cancelar</v-btn>
+        <v-btn data-cy="user-modal-btn-salvar" color="blue darken-1" :disabled="!valid" @click="save">Salvar</v-btn>
       </v-card-actions>
     </v-card>
     <v-snackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout">
@@ -58,6 +54,7 @@ export default defineComponent({
     const emptyUser = { uuid: uuidv4(), name: '', email: '' };
     const userStore = useUserStore();
     const user = ref<User>(emptyUser);
+    const valid = ref(false);
     const snackbar = ref({
       show: false,
       message: '',
@@ -65,14 +62,15 @@ export default defineComponent({
       timeout: 3000,
     });
 
+    const rules = {
+      required: (value: string) => !!value || 'Campo obrigatório',
+      email: (value: string) => /.+@.+\..+/.test(value) || 'E-mail deve ser válido',
+    };
+
     watch(
       () => props.userData,
       (newUserData) => {
-        if (props.isEditMode && newUserData) {
-          user.value = { ...(newUserData || emptyUser) };
-        } else {
-          user.value = { ...emptyUser, uuid: uuidv4() };
-        }
+        user.value = props.isEditMode && newUserData ? { ...newUserData } : { ...emptyUser, uuid: uuidv4() };
       },
       { immediate: true }
     );
@@ -100,7 +98,7 @@ export default defineComponent({
     };
 
     const clearFields = () => {
-      user.value = { uuid: uuidv4(), name: '', email: '' };
+      user.value = { ...emptyUser, uuid: uuidv4() };
     };
 
     const onClose = () => {
@@ -115,13 +113,12 @@ export default defineComponent({
     };
 
     const generateUuid = () => {
-      if (!props.isEditMode) {
-        user.value.uuid = uuidv4();
-      }
+      if (!props.isEditMode) user.value.uuid = uuidv4();
     };
 
     return {
       user,
+      valid,
       close,
       save,
       clearFields,
@@ -129,6 +126,7 @@ export default defineComponent({
       snackbar,
       showSnackbar,
       generateUuid,
+      rules,
     };
   },
 });
