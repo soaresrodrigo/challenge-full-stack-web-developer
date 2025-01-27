@@ -11,6 +11,9 @@ export const Messages = {
         INVALID_UUID: "Invalid UUID",
         INVALID_EMAIL: "Invalid email address",
         LONG_NAME: "Name must be at least 4 characters long",
-        REQUIRED_FIELD_UPDATE: "At least one field is required to update"
+        REQUIRED_FIELD_UPDATE: "At least one field is required to update",
+        EMAIL_IS_REQUIRED: "Email is required",
+        NAME_IS_REQUIRED: "Name is required",
+        UUID_IS_REQUIRED: "UUID is required",
     }
 };

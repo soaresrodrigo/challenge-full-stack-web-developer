@@ -4,26 +4,27 @@ import { UpdateUserDTO } from "../dtos/update-user.dto";
 import { Messages } from "../constants/messages";
 import { validateCreateUser, validateUpdateUser } from "../utils/validate";
 import { toLowerCase } from "../utils/stringUtils";
-import { validate as uuidValidate, version as uuidVersion } from "uuid";
+import { validate as uuidValidate } from "uuid";
 
 const prisma = new PrismaClient();
 
 export class UserService {
   async createUser(data: CreateUserDTO): Promise<User> {
-    if (!uuidValidate(data.uuid) || uuidVersion(data.uuid) !== 4) {
+    validateCreateUser(data);
+
+    if(!uuidValidate(data.uuid)) {
       throw new Error(Messages.Validate.INVALID_UUID);
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUuid = await prisma.user.findUnique({
       where: { uuid: data.uuid },
     });
 
-    if (existingUser) {
+    if (existingUuid) {
       throw new Error(Messages.User.UUID_ALREADY_EXISTS);
     }
 
     const email = toLowerCase(data.email);
-    validateCreateUser({ ...data, email });
     const userRegistered = await this.isEmailAlreadyRegistered(email);
 
     if (email && userRegistered) {
