@@ -1,61 +1,81 @@
-# frontend
+### Frontend Desafio de Desenvolvedor Full Stack
 
-This template should help get you started developing with Vue 3 in Vite.
+#### Descrição
+Este é o frontend para o desafio de desenvolvedor full-stack. Ele utiliza **Vue 3**, **Vite**, **TypeScript**, **Cypress**, **Pinia** e **Vuetify** para fornecer uma experiência interativa e moderna no lado do cliente.
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Pré-requisitos
+Antes de começar, certifique-se de ter o seguinte instalado:
+- **Node.js** (versão 18 ou superior)
+- **npm** ou **yarn**
+- **API Backend** em execução (é conveniente que a API esteja funcionando, pois isso é necessário para testar os CRUDs e outras interações com o backend)
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Configuração do Ambiente
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+#### 1. Clone o Repositório
+```bash
+git clone https://github.com/soaresrodrigo/challenge-full-stack-web-developer.git
+cd challenge-full-stack-web-developer/frontend
 ```
 
-### Compile and Hot-Reload for Development
+#### 2. Instale as Dependências
+Use `npm` ou `yarn` para instalar as dependências do projeto:
+```bash
+npm ci
+# ou
+yarn install
+```
 
-```sh
+#### 3. Configure as Variáveis de Ambiente
+Copie o arquivo `.env.example` para um novo arquivo `.env`:
+```bash
+cp .env.example .env
+```
+Edite o arquivo `.env` para incluir as URLs da sua **API** e outras configurações necessárias:
+```
+VITE_API_BASE_URL=http://localhost:3000/api
+VITE_APP_URL=http://localhost:5173
+```
+
+---
+
+### Executando o Projeto
+
+Antes de iniciar, verifique o README da **API** no caminho `../api/README.MD` para garantir que o ambiente da API esteja configurado corretamente e em execução.
+
+Para iniciar o servidor de desenvolvimento (com recarregamento automático ao fazer alterações), use:
+```bash
 npm run dev
+# ou
+yarn dev
 ```
+Lembre-se de que a **API** precisa estar em execução para realizar operações CRUD e interagir corretamente com o backend.
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
+Agora você pode acessar o projeto no seu navegador através do seguinte link e navegar pelo menu superior:
 ```
-
-### Run Headed Component Tests with [Cypress Component Testing](https://on.cypress.io/component)
-
-```sh
-npm run test:unit:dev # or `npm run test:unit` for headless testing
+http://localhost:5173
 ```
+---
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+### Testes de Unidade
 
-```sh
-npm run test:e2e:dev
-```
+- **Testes de Unidade**:
+  ```bash
+  npm run test:unit:dev
+  # ou
+  yarn test:unit:dev
+  ```
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
+---
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+### Tecnologias Utilizadas
+- **Vue 3**
+- **Vite**
+- **Pinia** (State Management)
+- **Vuetify** (UI Framework)
+- **Axios** (Requisições HTTP)
+- **Cypress** (Testes E2E e Componentes)
+- **TypeScript**
