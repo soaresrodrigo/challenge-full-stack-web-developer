@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
@@ -18,7 +19,7 @@ const router = Router();
  *             properties:
  *               uuid:
  *                 type: string
- *                 example: be98df6c-808d-4c16-b1fb-a8eb5877fe12
+ *                 example: ${uuidv4()}
  *               name:
  *                 type: string
  *                 example: John Doe
@@ -69,6 +70,7 @@ router.get('/', UserController.getUsers);
  *         name: uuid
  *         schema:
  *           type: string
+ *           example: ${uuidv4()}
  *         required: true
  *         description: UUID of the user
  *     responses:
@@ -90,6 +92,7 @@ router.get('/:uuid', UserController.getUser);
  *         name: uuid
  *         schema:
  *           type: string
+ *           example: ${uuidv4()}
  *         required: true
  *         description: UUID of the user
  *     requestBody:
@@ -124,6 +127,7 @@ router.put('/:uuid', UserController.updateUser);
  *         name: uuid
  *         schema:
  *           type: string
+ *           example: ${uuidv4()}
  *         required: true
  *         description: UUID of the user
  *     responses:
