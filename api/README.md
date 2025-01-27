@@ -1,7 +1,7 @@
 ### API Desafio de Desenvolvedor Full Stack
 
 #### Descrição
-Este projeto é uma API para um desafio de desenvolvedor full-stack. Ele utiliza **Node.js**, **TypeScript**, **Prisma ORM**, **Express.js** e outras bibliotecas para fornecer uma base robusta e escalável para a aplicação.
+Este projeto é uma API para um desafio de desenvolvedor full-stack. Ele utiliza **Node.js**, **TypeScript**, **Prisma ORM**, **Express.js** e outras bibliotecas para fornecer uma base robusta e escalável para a aplicação. Além disso, a API conta com uma documentação interativa utilizando o **Swagger**.
 
 ---
 
@@ -90,6 +90,16 @@ O servidor estará disponível em `http://localhost:3000` (porta padrão).
 
 ---
 
+### Documentação da API (Swagger)
+A API inclui uma documentação interativa gerada pelo **Swagger**. Para acessá-la, inicie o servidor e abra o seguinte link no seu navegador:
+```
+http://localhost:3000/api-docs
+```
+
+Na documentação, você encontrará todas as rotas disponíveis, os métodos suportados, os parâmetros esperados, e exemplos de requisições e respostas.
+
+---
+
 ### Testes
 Execute os testes com:
 ```bash
@@ -105,8 +115,7 @@ yarn test
 - **TypeScript**
 - **Express.js**
 - **Prisma ORM**
+- **Swagger**
 - **Jest**
 - **Zod**
 - **PostgreSQL**
-
----
