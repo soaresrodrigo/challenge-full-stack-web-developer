@@ -6,7 +6,7 @@ const router = Router();
 // Call user routes
 router.use('/users', userRoutes);
 
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
   res.status(200).json({ message: 'Welcome!' });
 });
 
